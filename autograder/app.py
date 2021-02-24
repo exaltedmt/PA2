@@ -50,6 +50,7 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    print(os.path.dirname(os.path.abspath(__file__)))
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -65,7 +66,6 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            print(os.path.dirname(os.path.abspath(__file__)))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)               
