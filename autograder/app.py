@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 
+"""
+Name: Royce Harley
+ID: 811778401
+Subject: CSCI4795, In Kee Kim
+Title: PA2
+"""
+
+# Thanks to: https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/ 
+# ...and: https://docs.python.org/3/library/subprocess.html
+
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 import os
 import random
 from werkzeug.utils import secure_filename
 import shlex, subprocess
 
+# To put us in location with the python.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 UPLOAD_FOLDER = 'uploads'
@@ -69,12 +80,15 @@ def upload_file():
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # To retrieve the file uploaded.
             send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)               
            
             score = grader()
             return render_template("result.html", score=score, filename=filename)
             # return redirect(url_for('result',      filename=filename))
+    
+    # Display the html on homepage.
     return render_template("index.html")
 
 """
