@@ -6,7 +6,8 @@ import shlex, subprocess
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-UPLOAD_FOLDER = 'uploads'
+# UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'cc', 'py', 'html', 'css'}
 
 app = Flask(__name__)
@@ -64,6 +65,7 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            print(os.path.dirname(os.path.abspath(__file__)))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)               
