@@ -1,10 +1,12 @@
-from flask import Flask, render_template, flash, request, redirect, url_for
+from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 import os
 import random
 from werkzeug.utils import secure_filename
 import shlex, subprocess
 
-UPLOAD_FOLDER = '/uploads'
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'cc', 'py', 'html', 'css'}
 
 app = Flask(__name__)
@@ -19,15 +21,33 @@ print(args)
 p = subprocess.call(args, shell=True) # Success!
     """
 
+def grader():
+    subprocess.call("rm -f ./a.out", shell=True)
+    retcode = subprocess.call("/usr/bin/g++ uploads/walk.cc", shell=True)
+
+    score = None 
+    if retcode:
+        print("Failed to compile walk.cc!")
+        exit
+    else: 
+        subprocess.call("rm -f ./output", shell=True)
+        retcode = subprocess.call("./test.sh", shell=True)
+
+        bScore = true
+        score = str(retcode)
+        print("Score: " + str(retcode) + " out of 2 correct.")
+        print("*************Original submission*************")
+
+        with open('uploads/walk.cc','r') as fs:
+            print(fs.read())
+        
+    return score
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/', methods=['GET', 'POST'])
-def index():
-    return render_template("index.html")
-    # return render_template("index.html", url=url) - for cats example
-
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -45,31 +65,23 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)               
+           
+            score = grader()
+            return render_template("result.html", score=score)
+            # return redirect(url_for('result',      filename=filename))
+    return render_template("index.html")
 
-def result():
-    return render_template("result.html", score="0")    
+"""
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+"""                       
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
-    subprocess.call("rm -f ./a.out", shell=True)
-    retcode = subprocess.call("/usr/bin/g++ uploads/walk.cc", shell=True)
-
-    if retcode:
-        print("failed to compile walk.cc")
-        exit
-
-    subprocess.call("rm -f ./output", shell=True)
-    retcode = subprocess.call("./test.sh", shell=True)
-    with open('/a.out','r') as fs:
-        print(fs.read())
-
-    print("Score: " + str(retcode) + " out of 2 correct.")
-    print("*************Original submission*************")
-
-    with open('uploads/walk.cc','r') as fs:
-        print(fs.read())
 
 
