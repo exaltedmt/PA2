@@ -73,7 +73,7 @@ def upload_file():
                                filename)               
            
             score = grader()
-            return render_template("result.html", score=score)
+            return render_template("result.html", score=score, filename=filename)
             # return redirect(url_for('result',      filename=filename))
     return render_template("index.html")
 
