@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 import shlex, subprocess
 
 UPLOAD_FOLDER = '/uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'cc', 'py', 'html', 'css'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
