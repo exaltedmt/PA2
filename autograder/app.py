@@ -24,6 +24,7 @@ p = subprocess.call(args, shell=True) # Success!
 def grader():
     subprocess.call("rm -f ./a.out", shell=True)
     retcode = subprocess.call("/usr/bin/g++ uploads/walk.cc", shell=True)
+    print(retcode)
 
     score = None 
     if retcode:
