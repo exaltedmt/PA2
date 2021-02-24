@@ -6,8 +6,7 @@ import shlex, subprocess
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# UPLOAD_FOLDER = 'uploads'
-UPLOAD_FOLDER = '~/PA2/uploads'
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'cc', 'py', 'html', 'css'}
 
 app = Flask(__name__)
