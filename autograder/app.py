@@ -33,7 +33,6 @@ def grader():
         subprocess.call("rm -f ./output", shell=True)
         retcode = subprocess.call("./test.sh", shell=True)
 
-        bScore = true
         score = str(retcode)
         print("Score: " + str(retcode) + " out of 2 correct.")
         print("*************Original submission*************")
